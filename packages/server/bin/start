@@ -1,0 +1,114 @@
+#!/usr/bin/env node
+
+/**
+ * Copyright (c) 2019-present, Bruno Carvalho de Araujo.
+ * All rights reserved.
+ *
+ * This source code is licensed under the license found in the LICENSE file in
+ * the root directory of this source tree.
+ */
+
+// set default environment variables
+process.env.DEBUG = 'server:*'
+process.env.NODE_ENV = process.env.NODE_ENV || 'development'
+process.env.PORT = process.env.PORT || '2650'
+process.env.DB_DRIVER = process.env.DB_DRIVER || 'sqlite'
+
+// create start time reference
+const startTime = Date.now()
+
+// load application core dependences
+const pkg = require('../package.json')
+const server = require('esm')(module)('../src').default
+
+console.info('%s v%s starting', pkg.name, pkg.version)
+
+if (process.env.NODE_ENV === 'development') {
+  console.info('starting application in development mode')
+}
+
+/**
+ * Normalize a port into a number, string, or false.
+ *
+ * @param {number|string} val
+ * @returns {string|number|boolean}
+ */
+function normalizePort (val) {
+  const port = parseInt(val, 10)
+
+  if (isNaN(port)) {
+    // named pipe
+    return val
+  }
+
+  if (port >= 0) {
+    // port number
+    return port
+  }
+
+  return false
+}
+
+const port = normalizePort(process.env.PORT)
+
+/**
+ * Event listener for HTTP server "error" event.
+ *
+ * @param {Error} error
+ */
+function onError (error) {
+  if (error.syscall !== 'listen') {
+    throw error
+  }
+
+  const bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error('%s requires elevated privileges', bind)
+      process.exit(1)
+    case 'EADDRINUSE':
+      console.error('%s is already in use', bind)
+      process.exit(1)
+    default:
+      throw error
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ *
+ * @returns {void}
+ */
+function onListening () {
+  const addr = server.address()
+
+  const bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port
+
+  console.info('listening on %s', bind)
+  console.info('connection established')
+  console.info('boot in %s', (Date.now() - startTime) / 1000 + 'ms')
+}
+
+server.listen(port)
+server.on('error', onError)
+server.on('listening', onListening)
+
+process.on('SIGTERM', () => {
+  console.info('received SIGTERM, shutting down server')
+
+  server.close()
+  process.exit(0)
+})
+
+process.on('SIGINT', () => {
+  console.info('received SIGINT, shutting down server')
+
+  server.close()
+  process.exit(0)
+})

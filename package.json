@@ -1,0 +1,12 @@
+{
+  "name": "meusimples",
+  "version": "1.0.0",
+  "author": "Bruno Carvalho de Araujo <brunocarvalhodearaujo@gmail.com>",
+  "license": "proprietary",
+  "private": true,
+  "bolt": {
+    "workspaces": [
+      "packages/*"
+    ]
+  }
+}
