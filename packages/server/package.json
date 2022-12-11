@@ -25,7 +25,7 @@
     "bunyan": "1.8.12",
     "cors": "2.8.5",
     "esm": "3.2.25",
-    "express": "4.17.1",
+    "express": "4.17.3",
     "express-oauth-server": "2.0.0",
     "express-slim-router": "2.1.9",
     "json-mask": "0.3.8",
