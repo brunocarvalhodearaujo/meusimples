@@ -29,7 +29,7 @@
     "express-oauth-server": "2.0.0",
     "express-slim-router": "2.1.9",
     "json-mask": "0.3.8",
-    "knex": "0.20.4",
+    "knex": "2.4.0",
     "lodash": "4.17.15",
     "moment": "2.24.0",
     "yup": "0.27.0"
